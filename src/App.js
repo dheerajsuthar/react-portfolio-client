@@ -1,25 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import ApolloClient from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import { ApolloProvider } from 'react-apollo';
+
+import Home from './pages/Home';
+import Profile from './pages/Profile'
 import './App.css';
 
+
+const createApolloClient = () => {
+  return new ApolloClient({
+    link: new HttpLink({
+      uri: 'http://localhost:8080/v1/graphql',
+      headers:{
+        'x-hasura-admin-secret': 'neworder'
+      }
+    }),
+    cache: new InMemoryCache(),
+  });
+};
+
 function App() {
+  const client = createApolloClient();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <Router>
+        <Route exact path="/" component={Home} />
+        <Route path="/profile/:userId" component={Profile}></Route>
+      </Router>
+    </ApolloProvider>
   );
 }
 
