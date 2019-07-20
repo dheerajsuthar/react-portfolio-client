@@ -6,7 +6,7 @@ import { HttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
 
 import Home from './pages/Home';
-import Profile from './pages/Profile'
+import Profile from './pages/profile/Profile'
 import './App.css';
 
 
